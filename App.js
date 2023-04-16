@@ -1,10 +1,14 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, TextInput } from "react-native";
+import { StyleSheet, Text, View, TextInput, Dimensions } from "react-native";
 import { theme } from "./color";
 import { SimpleLineIcons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import { Foundation } from "@expo/vector-icons";
 import * as Font from "expo-font";
+import { SelectList } from "react-native-dropdown-select-list";
+import CheckBox from "react-native-check-box";
+
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
 
 export default function App() {
   return (
@@ -18,6 +22,12 @@ export default function App() {
         <View style={styles.mainView}>
           <Text>GPT API</Text>
         </View>
+        <View>
+          <SelectList></SelectList>
+          <SelectList></SelectList>
+          <SelectList></SelectList>
+          {/* <CheckBox></CheckBox> */}
+        </View>
         <View style={styles.inputBar}>
           <TextInput placeholder={"내용을 입력하세요"} style={styles.input} />
           <FontAwesome
@@ -26,7 +36,7 @@ export default function App() {
             color={theme.input}
             style={{
               position: "absolute",
-              paddingLeft: 330,
+              paddingLeft: SCREEN_WIDTH - 80,
               paddingBottom: 10,
             }}
           />
