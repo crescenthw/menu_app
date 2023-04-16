@@ -7,10 +7,35 @@ import { Foundation } from "@expo/vector-icons";
 import * as Font from "expo-font";
 import { SelectList } from "react-native-dropdown-select-list";
 import CheckBox from "react-native-check-box";
+import React from "react";
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
 
+const foods = [
+  { key: "1", value: "한식" },
+  { key: "2", value: "중식" },
+  { key: "3", value: "양식" },
+  { key: "4", value: "일식" },
+  { key: "5", value: "멕시칸 음식" },
+  { key: "6", value: "스페인 음식" },
+  { key: "7", value: "이탈리안 음식" },
+  { key: "8", value: "퓨전 음식" },
+  { key: "9", value: "태국 음식" },
+  { key: "10", value: "베트남 음식" },
+];
+
+const includeMeat = [
+  { key: "1", value: "채식" },
+  { key: "2", value: "고기포함" },
+  { key: "3", value: "상관없음" },
+];
+
 export default function App() {
+  const [food, setFood] = React.useState("");
+  const [meat, setMeat] = React.useState("");
+  const [milkCheck, setMilkCheck] = React.useState(false);
+  const [dietCheck, setDeitCheck] = React.useState(false);
+
   return (
     <View style={styles.container}>
       <StatusBar style="auto" backgroundColor={theme.bg} />
@@ -23,11 +48,50 @@ export default function App() {
           <Text>GPT API</Text>
         </View>
         <View>
-          <SelectList></SelectList>
-          <SelectList></SelectList>
-          <SelectList></SelectList>
-          {/* <CheckBox></CheckBox> */}
+          <View style={styles.filterbar}>
+            <View style={styles.filterFood}>
+              <Text>음식종류 </Text>
+              <SelectList
+                setSelected={setFood}
+                data={foods}
+                defaultOption={{ key: "1", value: "한식" }}
+              ></SelectList>
+            </View>
+            <View style={styles.filterMeat}>
+              <Text>고기포함 </Text>
+              <SelectList
+                setSelected={setMeat}
+                data={includeMeat}
+                defaultOption={{ key: "3", value: "상관없음" }}
+              ></SelectList>
+            </View>
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center",
+              paddingHorizontal: 20,
+              paddingVertical: 10,
+            }}
+          >
+            <View style={{ flexDirection: "row", marginRight: "20%" }}>
+              <Text>유제품 포함 </Text>
+              <CheckBox
+                isChecked={milkCheck}
+                onClick={() => setMilkCheck(!milkCheck)}
+              />
+            </View>
+            <View style={{ flexDirection: "row" }}>
+              <Text>다이어트 </Text>
+              <CheckBox
+                isChecked={dietCheck}
+                onClick={() => setDeitCheck(!dietCheck)}
+              />
+            </View>
+          </View>
         </View>
+
         <View style={styles.inputBar}>
           <TextInput placeholder={"내용을 입력하세요"} style={styles.input} />
           <FontAwesome
@@ -74,6 +138,20 @@ const styles = StyleSheet.create({
     opacity: 0.8,
     backgroundColor: theme.bg,
   },
+  filterbar: {
+    flexDirection: "row",
+    paddingVertical: 5,
+    paddingHorizontal: 20,
+    justifyContent: "center",
+    borderTopLeftRadius: 40,
+    borderTopRightRadius: 40,
+  },
+  filterFood: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginRight: "10%",
+  },
+  filterMeat: { flexDirection: "row", alignItems: "center" },
   inputBar: {
     flex: 1.5,
     alignItems: "center",
