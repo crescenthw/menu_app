@@ -1,10 +1,11 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, TextInput } from "react-native";
+import { theme } from "./color";
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <StatusBar style="auto" />
+      <StatusBar style="auto" backgroundColor={theme.bg} />
       <View style={{ flex: 1 }}>
         <View style={styles.statusView}>
           <Text>New Chat</Text>
@@ -23,24 +24,23 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white",
-    paddingVertical: 25,
+    backgroundColor: theme.bg,
   },
   statusView: {
-    flex: 1,
-    backgroundColor: "#74aa9c",
+    flex: 1.2,
     paddingHorizontal: 20,
-    paddingVertical: 20,
+    paddingTop: 20,
     alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: theme.teal,
   },
   mainView: {
-    flex: 20,
+    flex: 10,
     justifyContent: "center",
     alignItems: "center",
   },
   inputBar: {
-    flex: 2,
-    width: "100%",
+    flex: 1.5,
     alignItems: "center",
     justifyContent: "center",
     borderTopWidth: 1,
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
   input: {
     height: 50,
     width: "95%",
-    borderColor: "#5a67ea",
+    borderColor: theme.input,
     borderWidth: 2,
     padding: 10,
     borderRadius: 10,
