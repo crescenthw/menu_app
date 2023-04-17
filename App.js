@@ -30,9 +30,16 @@ const includeMeat = [
   { key: "3", value: "상관없음" },
 ];
 
+const foodNum = [
+  { key: "1", value: "5가지" },
+  { key: "2", value: "7가지" },
+  { key: "3", value: "10가지" },
+];
+
 export default function App() {
   const [food, setFood] = React.useState("");
   const [meat, setMeat] = React.useState("");
+  const [num, setNum] = React.useState("");
   const [milkCheck, setMilkCheck] = React.useState(false);
   const [dietCheck, setDeitCheck] = React.useState(false);
 
@@ -75,19 +82,29 @@ export default function App() {
               paddingVertical: 10,
             }}
           >
-            <View style={{ flexDirection: "row", marginRight: "20%" }}>
+            <View
+              style={{ flexDirection: "row", marginRight: 10, marginLeft: 30 }}
+            >
               <Text>유제품 포함 </Text>
               <CheckBox
                 isChecked={milkCheck}
                 onClick={() => setMilkCheck(!milkCheck)}
               />
             </View>
-            <View style={{ flexDirection: "row" }}>
+            <View style={{ flexDirection: "row", marginRight: 10 }}>
               <Text>다이어트 </Text>
               <CheckBox
                 isChecked={dietCheck}
                 onClick={() => setDeitCheck(!dietCheck)}
               />
+            </View>
+            <View style={styles.filterFood}>
+              <Text>추천 개수 </Text>
+              <SelectList
+                setSelected={setNum}
+                data={foodNum}
+                defaultOption={{ key: "1", value: "5가지" }}
+              ></SelectList>
             </View>
           </View>
         </View>
