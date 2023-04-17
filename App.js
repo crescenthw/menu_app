@@ -8,6 +8,7 @@ import * as Font from "expo-font";
 import { SelectList } from "react-native-dropdown-select-list";
 import CheckBox from "react-native-check-box";
 import React from "react";
+import ChatGPT from "./gpt";
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
 
@@ -52,7 +53,7 @@ export default function App() {
           <SimpleLineIcons name="menu" size={30} color={theme.bg} />
         </View>
         <View style={styles.mainView}>
-          <Text>GPT API</Text>
+          <ChatGPT />
         </View>
         <View>
           <View style={styles.filterbar}>
@@ -109,7 +110,7 @@ export default function App() {
           </View>
         </View>
 
-        <View style={styles.inputBar}>
+        {/* <View style={styles.inputBar}>
           <TextInput placeholder={"내용을 입력하세요"} style={styles.input} />
           <FontAwesome
             name="send-o"
@@ -121,7 +122,7 @@ export default function App() {
               paddingBottom: 10,
             }}
           />
-        </View>
+        </View> */}
       </View>
     </View>
   );
