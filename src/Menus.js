@@ -1,10 +1,12 @@
+// import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, StatusBar } from "react-native";
 import { SimpleLineIcons } from "@expo/vector-icons";
 import React from "react";
-import ChatGPT from "./src/gpt";
-import StatusMenu from "./src/StatusNav";
+import ChatGPT from "./ChatGPT";
+import StatusMenu from "./StatusNav";
+import ChatGPT1 from "./gpt";
 
-export default function App() {
+export default function Menus() {
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor={"white"} barStyle={"dark-content"} />
@@ -13,7 +15,8 @@ export default function App() {
           <StatusMenu />
         </View>
         <View style={styles.mainView}>
-          <ChatGPT />
+          {/* <ChatGPT /> */}
+          <ChatGPT1 />
         </View>
       </View>
     </View>

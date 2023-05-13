@@ -6,19 +6,17 @@ import {
   TextInput,
   TouchableOpacity,
   Dimensions,
+  Linking, // 추가된 부분
 } from "react-native";
 import React, { useState } from "react";
 import axios from "axios";
 import { FontAwesome } from "@expo/vector-icons";
-import { theme } from "./color";
-
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
 
 const ChatGPT = () => {
   const [data, setData] = useState([]);
-  const apiKey = "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";
+  const apiKey = "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";
   const apiUrl =
-    "https://api.openai.com/v1/engines/text-davinci-002/completions";
+    "https://api.openai.com/v1/engines/text-davinci-003/completions";
   const [textInput, setTextInput] = useState("");
 
   const handleSend = async () => {
@@ -45,9 +43,45 @@ const ChatGPT = () => {
     ]);
     setTextInput("");
   };
+
+  // 추가된 부분
+  const handleLinkPress = (text) => {
+    const url = `https://www.google.com/maps/search/${text}`;
+    Linking.openURL(url);
+  };
+
+  // 추가된 부분
+  const renderText = (text, type) => {
+    if (type === "user") {
+      return <Text>{text}</Text>;
+    } else if (type === "bot") {
+      const words = text.split(" ");
+      const elements = words.map((word, index) => {
+        if (index < words.length - 1) {
+          return (
+            <Text key={index}>
+              <Text onPress={() => handleLinkPress(word)} style={styles.link}>
+                {word}
+              </Text>{" "}
+            </Text>
+          );
+        } else {
+          return (
+            <Text key={index}>
+              <Text onPress={() => handleLinkPress(word)} style={styles.link}>
+                {word}
+              </Text>
+            </Text>
+          );
+        }
+      });
+      return <Text>{elements}</Text>;
+    }
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>메뉴추천</Text>
+      <Text>{"\n"}</Text>
       <FlatList
         data={data}
         keyExtractor={(item, index) => index.toString()}
@@ -60,39 +94,25 @@ const ChatGPT = () => {
                 color: item.type === "user" ? "green" : "red",
               }}
             >
-              {item.type === "user" ? "Ninza" : "Bot"}
+              {item.type === "user" ? "User" : "Bot"}
             </Text>
-            <Text style={styles.bot}>{item.text}</Text>
+            {renderText(item.text, item.type)}
           </View>
         )}
       />
       <View style={styles.inputBar}>
         <TextInput
-          placeholder={"내용을 입력하세요"}
+          placeholder={"내용을 입력하세요."}
           style={styles.input}
           value={textInput}
           onChangeText={(text) => setTextInput(text)}
         />
-        <TouchableOpacity
-          style={{
-            position: "absolute",
-            paddingLeft: SCREEN_WIDTH - 80,
-            paddingBottom: 10,
-          }}
-          onPress={handleSend}
-        >
-          <FontAwesome name="send-o" size={24} color={theme.input} />
-        </TouchableOpacity>
+        <View style={{ position: "absolute", right: 18, paddingBottom: 10 }}>
+          <TouchableOpacity onPress={handleSend}>
+            <FontAwesome name="send-o" size={24} color="#5a67ea" />
+          </TouchableOpacity>
+        </View>
       </View>
-      {/* <TextInput
-        style={styles.input}
-        value={textInput}
-        onChangeText={(text) => setTextInput(text)}
-        placeholder="Ask me anything"
-      />
-      <TouchableOpacity style={styles.button} onPress={handleSend}>
-        <Text style={styles.buttonText}>Let's Go</Text>
-      </TouchableOpacity> */}
     </View>
   );
 };
@@ -103,7 +123,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    width: SCREEN_WIDTH,
+    width: "100%",
   },
   title: {
     fontSize: 28,
@@ -119,7 +139,7 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: "yellow",
-    width: "90%",
+    width: "95%",
     height: 60,
     borderRadius: 10,
     justifyContent: "center",
@@ -134,18 +154,15 @@ const styles = StyleSheet.create({
   inputBar: {
     alignItems: "center",
     justifyContent: "center",
+    flexDirection: "row",
     paddingBottom: 10,
     opacity: 0.8,
-    flexDirection: "row",
-    // borderTopWidth: 1,
-    // borderColor: "grey",
-    // borderOpacity: 0.8,
   },
   input: {
     height: 50,
-    width: SCREEN_WIDTH - 10,
-    backgroundColor: theme.bg,
-    borderColor: theme.input,
+    width: "95%",
+    backgroundColor: "white",
+    borderColor: "#5a67ea",
     borderWidth: 2,
     padding: 10,
     borderRadius: 30,
