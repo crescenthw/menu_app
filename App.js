@@ -33,11 +33,23 @@ export default function App() {
               backgroundColor: "#74aa9c",
             },
             headerTintColor: "white",
-            contentStyle: { backgroundColor: "white" },
+            contentStyle: { backgroundColor: "#f3f6fc" },
           }}
         >
-          <Stack.Screen name="ChatScreen" component={GPTScreen} />
-          <Stack.Screen name="MenuScreen" component={MenuScreen} />
+          <Stack.Screen
+            name="ChatScreen"
+            component={GPTScreen}
+            options={{
+              title: "메뉴추천",
+            }}
+          />
+          <Stack.Screen
+            name="MenuScreen"
+            component={MenuScreen}
+            options={{
+              title: "음식정보",
+            }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </>
