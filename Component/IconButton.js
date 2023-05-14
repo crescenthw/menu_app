@@ -8,7 +8,7 @@ export default function IconButton(onPress) {
       style={({ pressed }) => pressed && styles.pressed}
     >
       <FontAwesome
-        name="send-o"
+        name="star-o"
         size={24}
         color="#5a67ea"
         style={styles.inputBtn}
