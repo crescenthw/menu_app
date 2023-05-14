@@ -17,12 +17,12 @@ import { GPTLOGO } from "../img/imgSource";
 
 const GPTScreen = ({ navigation }) => {
   const [data, setData] = useState([]);
-  const apiKey = "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";
+  const apiKey = "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";
   const apiUrl =
     "https://api.openai.com/v1/engines/text-davinci-003/completions";
   const [textInput, setTextInput] = useState("");
 
-  const realText = `${textInput} 위의 조건에 해당하는 음식 5가지를 {번호. 음식 }형태로 추천해주고, 음식이름에 띄어쓰기는 다 붙여서 출려해줘`;
+  const realText = `${textInput} 위의 조건에 해당하는 음식 5가지를 {번호. 음식 }형태로 추천해주고, 음식이름에 띄어쓰기는 다 붙여서 출력해줘`;
 
   const handleSend = async () => {
     const prompt = realText;
