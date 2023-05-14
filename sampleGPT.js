@@ -22,7 +22,7 @@ const GPTScreen = () => {
   const realText = `나는 한식을 선호하고, 돼지고기가 들어간 음식을 선호해. 오늘은 ${textInput} 위의 조건에 해당하는 음식 5가지를 번호: 음식 형태로 추천해줄래?`;
 
   const handleSend = async () => {
-    const prompt = realText;
+    const prompt = textInput;
     const response = await axios.post(
       apiUrl,
       {

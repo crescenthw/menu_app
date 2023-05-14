@@ -36,7 +36,7 @@ export default function App() {
             contentStyle: { backgroundColor: "white" },
           }}
         >
-          <Stack.Screen name="ChatScreen" component={ChatScreen} />
+          <Stack.Screen name="ChatScreen" component={GPTScreen} />
           <Stack.Screen name="MenuScreen" component={MenuScreen} />
         </Stack.Navigator>
       </NavigationContainer>
