@@ -12,7 +12,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { FontAwesome } from "@expo/vector-icons";
 
-const ChatGPT = () => {
+const GPTScreen = () => {
   const [data, setData] = useState([]);
   const apiKey = "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";
   const apiUrl =
@@ -117,7 +117,7 @@ const ChatGPT = () => {
   );
 };
 
-export default ChatGPT;
+export default GPTScreen;
 
 const styles = StyleSheet.create({
   container: {

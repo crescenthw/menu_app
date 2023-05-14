@@ -1,55 +1,45 @@
-import { StyleSheet, Text, View, StatusBar } from "react-native";
-import { SimpleLineIcons } from "@expo/vector-icons";
+import { StatusBar } from "expo-status-bar";
+import { StyleSheet, Text, View } from "react-native";
 import React from "react";
-import ChatGPT from "./src/gpt";
-import StatusMenu from "./src/StatusNav";
+import ChatGPT from "./screen/GPTScreen";
+import ChooseMenu from "./screen/MenuScreen";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import GPTScreen from "./screen/GPTScreen";
+import MenuScreen from "./screen/MenuScreen";
+import ChatScreen from "./screen/ChatScreen";
+// import { createDrawerNavigator } from "@react-navigation/drawer";
+
+const Stack = createNativeStackNavigator();
+// const Drawer = createDrawerNavigator();
+
+// function DrawerNavigator() {
+//   return (
+//     <Drawer.Navigator>
+//       <Drawer.Screen name="ChatScreen" component={ChatGPT} />
+//       <Drawer.Screen name="SetMenu" component={ChooseMenu} />
+//     </Drawer.Navigator>
+//   );
+// }
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <StatusBar backgroundColor={"white"} barStyle={"dark-content"} />
-      <View style={{ flex: 1 }}>
-        <View style={styles.statusView}>
-          <StatusMenu />
-        </View>
-        <View style={styles.mainView}>
-          <ChatGPT />
-        </View>
-      </View>
-    </View>
+    <>
+      <StatusBar style="light" />
+      <NavigationContainer>
+        <Stack.Navigator
+          screenOptions={{
+            headerStyle: {
+              backgroundColor: "#74aa9c",
+            },
+            headerTintColor: "white",
+            contentStyle: { backgroundColor: "white" },
+          }}
+        >
+          <Stack.Screen name="ChatScreen" component={ChatScreen} />
+          <Stack.Screen name="MenuScreen" component={MenuScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#74aa9c",
-  },
-  statusView: {
-    flex: 1.5,
-  },
-  mainView: {
-    flex: 10,
-    width: "100%",
-    justifyContent: "center",
-    alignItems: "center",
-    borderTopLeftRadius: 40,
-    borderTopRightRadius: 40,
-    opacity: 0.8,
-    backgroundColor: "white",
-  },
-  filterbar: {
-    flexDirection: "row",
-    paddingVertical: 5,
-    paddingHorizontal: 20,
-    justifyContent: "center",
-    borderTopLeftRadius: 40,
-    borderTopRightRadius: 40,
-  },
-  filterFood: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginRight: "10%",
-  },
-  filterMeat: { flexDirection: "row", alignItems: "center" },
-});
