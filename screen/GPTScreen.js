@@ -5,10 +5,8 @@ import {
   FlatList,
   TextInput,
   TouchableOpacity,
-  Dimensions,
   Linking,
   Image,
-  ScrollView, // 추가된 부분
 } from "react-native";
 import React, { useState } from "react";
 import axios from "axios";
@@ -18,7 +16,7 @@ import { GPTLOGO } from "../img/imgSource";
 
 const GPTScreen = ({ navigation }) => {
   const [data, setData] = useState([]);
-  const apiKey = "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";
+  const apiKey = "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";
   const apiUrl = "https://api.openai.com/v1/chat/completions";
   const [textInput, setTextInput] = useState("");
   const realText = `${textInput} 위의 조건에 해당하는 음식 5가지를 추천해줘, 출력형식은 {번호. 음식(줄바꿈)} 형식으로 출력하고, 음식이름에 띄어쓰기는 다 붙여서 출력해줘`;
@@ -58,7 +56,6 @@ const GPTScreen = ({ navigation }) => {
 
   const pressHandler = async (word) => {
     try {
-      console.log("pressed!!");
       const PressWord = `${word}의 [재료]와 [레시피] 형식으로 알려줘.`;
       const response = await fetch(apiUrl, {
         method: "POST",
@@ -93,13 +90,12 @@ const GPTScreen = ({ navigation }) => {
       const elements = words.map((word, index) => {
         const extractedWord = word.replace(/[0-9.]/g, "");
         return (
-          <Text
+          <TouchableOpacity
             key={index}
-            style={[styles.gptText, { paddingTop: 5 }]}
             onPress={() => pressHandler(extractedWord)}
           >
-            {word}
-          </Text>
+            <Text style={[styles.gptText, { paddingTop: 5 }]}>{word}</Text>
+          </TouchableOpacity>
         );
       });
       return elements;

@@ -16,11 +16,9 @@ import {
   Linking,
 } from "react-native";
 import { MEALS } from "../data/dummy-data";
-import MealDetails from "../components/MealDetails";
 import Subtitle from "../components/MealDetail/Subtitle";
 import List from "../components/MealDetail/List";
 import { useLayoutEffect } from "react";
-import IconButton from "../components/IconButton";
 import { AntDesign } from "@expo/vector-icons";
 
 export default function MealDetailScreen({ route, navigation }) {
@@ -66,20 +64,11 @@ export default function MealDetailScreen({ route, navigation }) {
 
   const handleLinkPress = (text) => {
     const url = `https://www.google.com/maps/search/${text}`;
-    console.log(text);
     Linking.openURL(url);
   };
 
   const arrIngredientText = ingredientText.split("-");
   const arrRecipeText = recipeText.split(/\d+\.\s/).filter(Boolean);
-  console.log(arrIngredientText);
-  console.log(arrRecipeText);
-
-  const realIngredientText = arrIngredientText.slice(1);
-  const realRecipeText = arrRecipeText.slice(1);
-
-  console.log(realIngredientText);
-  console.log(realRecipeText);
 
   return (
     <ScrollView style={styles.rootContainer}>
@@ -87,9 +76,9 @@ export default function MealDetailScreen({ route, navigation }) {
       <View style={styles.listOuterContainer}>
         <View style={styles.listContainer}>
           <Subtitle>재료</Subtitle>
-          <List data={realIngredientText} />
+          <List data={arrIngredientText} />
           <Subtitle>레시피</Subtitle>
-          <List data={realRecipeText} />
+          <List data={arrRecipeText} />
         </View>
       </View>
       <Pressable
