@@ -7,7 +7,8 @@ import {
   TouchableOpacity,
   Dimensions,
   Linking,
-  Image, // 추가된 부분
+  Image,
+  ScrollView, // 추가된 부분
 } from "react-native";
 import React, { useState } from "react";
 import axios from "axios";
@@ -17,36 +18,36 @@ import { GPTLOGO } from "../img/imgSource";
 
 const GPTScreen = ({ navigation }) => {
   const [data, setData] = useState([]);
-  const apiKey = "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";
-  const apiUrl =
-    "https://api.openai.com/v1/engines/text-davinci-003/completions";
+  const apiKey = "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";
+  const apiUrl = "https://api.openai.com/v1/chat/completions";
   const [textInput, setTextInput] = useState("");
-
   const realText = `${textInput} 위의 조건에 해당하는 음식 5가지를 추천해줘, 출력형식은 {번호. 음식(줄바꿈)} 형식으로 출력하고, 음식이름에 띄어쓰기는 다 붙여서 출력해줘`;
 
   const handleSend = async () => {
-    const prompt = realText;
-    const response = await axios.post(
-      apiUrl,
-      {
-        prompt: prompt,
-        max_tokens: 1024,
-        temperature: 0.5,
-      },
-      {
+    try {
+      const question = realText;
+      const response = await fetch(apiUrl, {
+        method: "POST",
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${apiKey}`,
+          "Content-Type": "application/json",
         },
-      }
-    );
-    const text = response.data.choices[0].text;
-    setData([
-      ...data,
-      { type: "user", text: textInput },
-      { type: "bot", text: text },
-    ]);
-    setTextInput("");
+        body: JSON.stringify({
+          model: "gpt-3.5-turbo",
+          messages: [{ role: "user", content: question }],
+        }),
+      });
+      const responseData = await response.json();
+      const text = responseData.choices[0].message.content;
+      setData([
+        ...data,
+        { type: "user", text: textInput },
+        { type: "bot", text: text },
+      ]);
+      setTextInput("");
+    } catch (error) {
+      console.error("Error occurred:", error);
+    }
   };
 
   // 추가된 부분
@@ -55,34 +56,53 @@ const GPTScreen = ({ navigation }) => {
     Linking.openURL(url);
   };
 
-  function pressHandler(word) {
-    navigation.navigate("MenuScreen", {
-      menu: word,
-    });
-  }
+  const pressHandler = async (word) => {
+    try {
+      console.log("pressed!!");
+      const PressWord = `${word}의 [재료]와 [레시피] 형식으로 알려줘.`;
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: "gpt-3.5-turbo",
+          messages: [{ role: "user", content: PressWord }],
+        }),
+      });
+
+      const responseData = await response.json();
+      const PressText = responseData.choices[0].message.content;
+
+      navigation.navigate("MenuScreen", {
+        menu: word,
+        text: PressText,
+      });
+    } catch (error) {
+      console.error("Error occurred:", error);
+    }
+  };
 
   // 추가된 부분
   const renderText = (text, type) => {
     if (type === "user") {
       return <Text style={styles.gptText}>{text}</Text>;
     } else if (type === "bot") {
-      const words = text.split(" ");
+      const words = text.split("\n");
       const elements = words.map((word, index) => {
-        if (index < words.length - 1) {
-          return (
-            <Text key={index} style={styles.gptText}>
-              <Text onPress={() => pressHandler(word)}>{word}</Text>{" "}
-            </Text>
-          );
-        } else {
-          return (
-            <Text key={index} style={styles.gptText}>
-              <Text onPress={() => pressHandler(word)}>{word}</Text>
-            </Text>
-          );
-        }
+        const extractedWord = word.replace(/[0-9.]/g, "");
+        return (
+          <Text
+            key={index}
+            style={[styles.gptText, { paddingTop: 5 }]}
+            onPress={() => pressHandler(extractedWord)}
+          >
+            {word}
+          </Text>
+        );
       });
-      return <Text>{elements}</Text>;
+      return elements;
     }
   };
 
@@ -92,6 +112,38 @@ const GPTScreen = ({ navigation }) => {
         data={data}
         keyExtractor={(item, index) => index.toString()}
         style={styles.body}
+        ListHeaderComponent={
+          <View style={styles.sampleTextView}>
+            <Text style={styles.sampleTitle}>GPT 사용예시</Text>
+            <Text></Text>
+            <Text
+              style={[
+                styles.sampleText,
+                { fontWeight: "600", marginBottom: 10 },
+              ]}
+            >
+              1. 집에서 만들어 먹을 때
+            </Text>
+            <Text style={styles.sampleText}>
+              "나는 지금 감자, 돼지고기, 당근을 가지고 있고, {"\n"}해당 음식은
+              가족과 함께 저녁식사로 먹을 예정이야. {"\n"}우리가족은 한식을
+              선호해"
+            </Text>
+            <Text></Text>
+            <Text
+              style={[
+                styles.sampleText,
+                { fontWeight: "600", marginBottom: 10 },
+              ]}
+            >
+              2. 배달 또는 식당에서 먹을 때
+            </Text>
+            <Text style={styles.sampleText}>
+              "나는 한식을 먹고싶고, 돼지고기나{"\n"} 소고기가 들어간 음식을
+              먹고 싶어"
+            </Text>
+          </View>
+        }
         renderItem={({ item }) => (
           <View
             style={[
@@ -100,6 +152,7 @@ const GPTScreen = ({ navigation }) => {
                 backgroundColor: item.type === "user" ? "#f3f6fc" : "white",
                 alignItems: item.type === "user" ? "center" : "flex-start",
                 marginTop: item.type === "user" ? 20 : 0,
+                paddingTop: item.type === "user" ? 0 : 20,
               },
             ]}
           >
@@ -114,15 +167,17 @@ const GPTScreen = ({ navigation }) => {
                   width: 50,
                   height: 50,
                   marginRight: 20,
-                  marginTop: 20,
                   marginLeft: 10,
                 }}
               />
             )}
-            {renderText(item.text, item.type)}
+            <View style={{ width: "82%" }}>
+              {renderText(item.text, item.type)}
+            </View>
           </View>
         )}
       />
+
       <View style={styles.inputBar}>
         <TextInput
           placeholder={"내용을 입력하세요"}
@@ -150,7 +205,6 @@ export default GPTScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: "100%",
   },
   title: {
     fontSize: 28,
@@ -158,16 +212,36 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     marginTop: 70,
   },
+  sampleTextView: {
+    marginLeft: 7,
+    marginRight: 7,
+    borderRadius: 20,
+    paddingBottom: 20,
+    paddingRight: 10,
+    alignItems: "center",
+    backgroundColor: "white",
+    marginTop: 35,
+    paddingTop: 10,
+  },
+  sampleTitle: {
+    textAlign: "center",
+    fontSize: 20,
+  },
+  sampleText: {
+    fontSize: 16,
+    textAlign: "center",
+  },
   body: {
     marginLeft: 7,
     marginRight: 7,
-    marginTop: 35,
   },
+
   textLine: {
-    flexDirection: "row",
     borderRadius: 20,
     width: "100%",
-    paddingBottom: 40,
+    paddingBottom: 20,
+    paddingRight: 10,
+    flexDirection: "row",
   },
   bot: {
     fontSize: 16,
@@ -183,7 +257,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   gptText: {
-    fontSize: 16,
+    fontSize: 18,
   },
   button: {
     backgroundColor: "yellow",
@@ -215,5 +289,6 @@ const styles = StyleSheet.create({
     padding: 10,
     paddingLeft: 15,
     borderRadius: 30,
+    paddingRight: 45,
   },
 });

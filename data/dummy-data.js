@@ -18,11 +18,13 @@ export const MEALS = [
   new Meal(
     "m1",
     ["c1", "c2"],
+    //음식이름
     "Spaghetti with Tomato Sauce",
     "affordable",
     "simple",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Spaghetti_Bolognese_mit_Parmesan_oder_Grana_Padano.jpg/800px-Spaghetti_Bolognese_mit_Parmesan_oder_Grana_Padano.jpg",
     20,
+    //재료
     [
       "4 Tomatoes",
       "1 Tablespoon of Olive Oil",
@@ -31,6 +33,7 @@ export const MEALS = [
       "Spices",
       "Cheese (optional)",
     ],
+    //레시피
     [
       "Cut the tomatoes and the onion into small pieces.",
       "Boil some water - add salt to it once it boils.",

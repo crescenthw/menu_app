@@ -8,6 +8,8 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import GPTScreen from "./screen/GPTScreen";
 import MenuScreen from "./screen/MenuScreen";
 import ChatScreen from "./screen/ChatScreen";
+
+// import "react-native-gesture-handler";
 // import { createDrawerNavigator } from "@react-navigation/drawer";
 
 const Stack = createNativeStackNavigator();
@@ -16,8 +18,8 @@ const Stack = createNativeStackNavigator();
 // function DrawerNavigator() {
 //   return (
 //     <Drawer.Navigator>
-//       <Drawer.Screen name="ChatScreen" component={ChatGPT} />
-//       <Drawer.Screen name="SetMenu" component={ChooseMenu} />
+//       <Drawer.Screen name="ChatScreen" component={GPTScreen} />
+//       <Drawer.Screen name="SetMenu" component={MenuScreen} />
 //     </Drawer.Navigator>
 //   );
 // }
@@ -40,7 +42,10 @@ export default function App() {
             name="ChatScreen"
             component={GPTScreen}
             options={{
-              title: "메뉴추천",
+              title: "PlatePal",
+              // headerTitleStyle: {
+              //   fontFamily: "DancingScript-Bold",
+              // },
             }}
           />
           <Stack.Screen

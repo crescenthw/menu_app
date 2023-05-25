@@ -21,12 +21,36 @@ import Subtitle from "../components/MealDetail/Subtitle";
 import List from "../components/MealDetail/List";
 import { useLayoutEffect } from "react";
 import IconButton from "../components/IconButton";
+import { AntDesign } from "@expo/vector-icons";
 
 export default function MealDetailScreen({ route, navigation }) {
   const menuName = route.params.menu;
   const mealId = "m3";
+  const GptText = route.params.text; //추가
   const selectedMeal = MEALS.find((meal) => meal.id === mealId);
   const detailText = `${menuName}의 레시피와 재료를 알려줘`;
+  const ingredientStartIndex = GptText.indexOf("[재료]");
+  const ingredientEndIndex = GptText.indexOf("[레시피]");
+
+  const recipeStartIndex = GptText.indexOf("[레시피]");
+  const recipeEndIndex = GptText.length;
+
+  let filteredText = GptText;
+  let ingredientText = "";
+  let recipeText = "";
+
+  if (ingredientStartIndex > -1 && ingredientEndIndex > -1) {
+    ingredientText = GptText.slice(
+      ingredientStartIndex + 4,
+      ingredientEndIndex
+    );
+    filteredText = filteredText.replace(ingredientText, "");
+  }
+
+  if (recipeStartIndex > -1 && recipeEndIndex > -1) {
+    recipeText = GptText.slice(recipeStartIndex + 5, recipeEndIndex);
+    filteredText = filteredText.replace(recipeText, "");
+  }
 
   function headerButtonPresshandler() {
     console.log("Pressed!!");
@@ -35,31 +59,37 @@ export default function MealDetailScreen({ route, navigation }) {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => {
-        return <IconButton onPress={headerButtonPresshandler} />;
+        return <AntDesign name="staro" size={28} color="white" />;
       },
     });
   }, [navigation, headerButtonPresshandler]);
 
   const handleLinkPress = (text) => {
     const url = `https://www.google.com/maps/search/${text}`;
+    console.log(text);
     Linking.openURL(url);
   };
 
+  const arrIngredientText = ingredientText.split("-");
+  const arrRecipeText = recipeText.split(/\d+\.\s/).filter(Boolean);
+  console.log(arrIngredientText);
+  console.log(arrRecipeText);
+
+  const realIngredientText = arrIngredientText.slice(1);
+  const realRecipeText = arrRecipeText.slice(1);
+
+  console.log(realIngredientText);
+  console.log(realRecipeText);
+
   return (
     <ScrollView style={styles.rootContainer}>
-      <Image style={styles.image} source={{ uri: selectedMeal.imageUrl }} />
       <Text style={styles.title}>{menuName}</Text>
-      <MealDetails
-        duration={selectedMeal.duration}
-        complexity={selectedMeal.complexity}
-        affordability={selectedMeal.affordability}
-      />
       <View style={styles.listOuterContainer}>
         <View style={styles.listContainer}>
-          <Subtitle>Ingredient</Subtitle>
-          <List data={selectedMeal.ingredients} />
-          <Subtitle>Steps</Subtitle>
-          <List data={selectedMeal.steps} />
+          <Subtitle>재료</Subtitle>
+          <List data={realIngredientText} />
+          <Subtitle>레시피</Subtitle>
+          <List data={realRecipeText} />
         </View>
       </View>
       <Pressable
@@ -89,6 +119,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     margin: 8,
     textAlign: "center",
+    marginTop: 40,
   },
   listOuterContainer: {
     alignItems: "center",
@@ -106,6 +137,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#5a67ea",
     borderRadius: 30,
     margin: 10,
+    marginTop: 20,
     shadowColor: "black",
     shadowOpacity: 0.25,
     shadowOffset: { width: 0, height: 2 },
