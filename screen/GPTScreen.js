@@ -13,11 +13,12 @@ import { FontAwesome } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { GPTLOGO } from "../img/imgSource";
 import GPTLoadingScreen from "./GPTLoadingScreen";
+import { API_KEY } from "../apiKey";
 
 const GPTScreen = ({ navigation }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const apiKey = "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";
+  const apiKey = API_KEY;
   const apiUrl = "https://api.openai.com/v1/chat/completions";
   const [textInput, setTextInput] = useState("");
   const realText = `${textInput} 위의 조건에 해당하는 음식 7가지를 추천해줘, 출력형식은 {번호. 음식 (줄바꿈)-간단한 음식 설명(줄바꿈)} 형식으로 출력해줘`;
