@@ -9,20 +9,22 @@ import {
   Image,
 } from "react-native";
 import React, { useState } from "react";
-import axios from "axios";
 import { FontAwesome } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { GPTLOGO } from "../img/imgSource";
+import GPTLoadingScreen from "./GPTLoadingScreen";
 
 const GPTScreen = ({ navigation }) => {
   const [data, setData] = useState([]);
-  const apiKey = "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";
+  const [loading, setLoading] = useState(false);
+  const apiKey = "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";
   const apiUrl = "https://api.openai.com/v1/chat/completions";
   const [textInput, setTextInput] = useState("");
-  const realText = `${textInput} 위의 조건에 해당하는 음식 5가지를 추천해줘, 출력형식은 {번호. 음식(줄바꿈)} 형식으로 출력하고, 음식이름에 띄어쓰기는 다 붙여서 출력해줘`;
+  const realText = `${textInput} 위의 조건에 해당하는 음식 7가지를 추천해줘, 출력형식은 {번호. 음식 (줄바꿈)-간단한 음식 설명(줄바꿈)} 형식으로 출력해줘`;
 
   const handleSend = async () => {
     try {
+      setLoading(true);
       const question = realText;
       const response = await fetch(apiUrl, {
         method: "POST",
@@ -43,6 +45,7 @@ const GPTScreen = ({ navigation }) => {
         { type: "bot", text: text },
       ]);
       setTextInput("");
+      setLoading(false);
     } catch (error) {
       console.error("Error occurred:", error);
     }
@@ -56,6 +59,7 @@ const GPTScreen = ({ navigation }) => {
 
   const pressHandler = async (word) => {
     try {
+      setLoading(true);
       const PressWord = `${word}의 [재료]와 [레시피] 형식으로 알려줘.`;
       const response = await fetch(apiUrl, {
         method: "POST",
@@ -72,6 +76,7 @@ const GPTScreen = ({ navigation }) => {
       const responseData = await response.json();
       const PressText = responseData.choices[0].message.content;
 
+      setLoading(false);
       navigation.navigate("MenuScreen", {
         menu: word,
         text: PressText,
@@ -104,94 +109,102 @@ const GPTScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={data}
-        keyExtractor={(item, index) => index.toString()}
-        style={styles.body}
-        ListHeaderComponent={
-          <View style={styles.sampleTextView}>
-            <Text style={styles.sampleTitle}>GPT 사용예시</Text>
-            <Text></Text>
-            <Text
-              style={[
-                styles.sampleText,
-                { fontWeight: "600", marginBottom: 10 },
-              ]}
-            >
-              1. 집에서 만들어 먹을 때
-            </Text>
-            <Text style={styles.sampleText}>
-              "나는 지금 감자, 돼지고기, 당근을 가지고 있고, {"\n"}해당 음식은
-              가족과 함께 저녁식사로 먹을 예정이야. {"\n"}우리가족은 한식을
-              선호해"
-            </Text>
-            <Text></Text>
-            <Text
-              style={[
-                styles.sampleText,
-                { fontWeight: "600", marginBottom: 10 },
-              ]}
-            >
-              2. 배달 또는 식당에서 먹을 때
-            </Text>
-            <Text style={styles.sampleText}>
-              "나는 한식을 먹고싶고, 돼지고기나{"\n"} 소고기가 들어간 음식을
-              먹고 싶어"
-            </Text>
-          </View>
-        }
-        renderItem={({ item }) => (
-          <View
-            style={[
-              styles.textLine,
-              {
-                backgroundColor: item.type === "user" ? "#f3f6fc" : "white",
-                alignItems: item.type === "user" ? "center" : "flex-start",
-                marginTop: item.type === "user" ? 20 : 0,
-                paddingTop: item.type === "user" ? 0 : 20,
-              },
-            ]}
-          >
-            {item.type === "user" ? (
-              <View style={styles.avertar}>
-                <Feather name="user" size={32} color="white" />
+      {loading ? (
+        <GPTLoadingScreen />
+      ) : (
+        <>
+          <FlatList
+            data={data}
+            keyExtractor={(item, index) => index.toString()}
+            style={styles.body}
+            ListHeaderComponent={
+              <View style={styles.sampleTextView}>
+                <Text style={styles.sampleTitle}>GPT 사용예시</Text>
+                <Text></Text>
+                <Text
+                  style={[
+                    styles.sampleText,
+                    { fontWeight: "600", marginBottom: 10 },
+                  ]}
+                >
+                  1. 집에서 만들어 먹을 때
+                </Text>
+                <Text style={styles.sampleText}>
+                  "나는 지금 감자, 돼지고기, 당근을 가지고 있고, {"\n"}해당
+                  음식은 가족과 함께 저녁식사로 먹을 예정이야. {"\n"}우리가족은
+                  한식을 선호해"
+                </Text>
+                <Text></Text>
+                <Text
+                  style={[
+                    styles.sampleText,
+                    { fontWeight: "600", marginBottom: 10 },
+                  ]}
+                >
+                  2. 배달 또는 식당에서 먹을 때
+                </Text>
+                <Text style={styles.sampleText}>
+                  "나는 한식을 먹고싶고, 돼지고기나{"\n"} 소고기가 들어간 음식을
+                  먹고 싶어"
+                </Text>
               </View>
-            ) : (
-              <Image
-                source={{ uri: GPTLOGO }}
-                style={{
-                  width: 50,
-                  height: 50,
-                  marginRight: 20,
-                  marginLeft: 10,
-                }}
-              />
+            }
+            renderItem={({ item }) => (
+              <View
+                style={[
+                  styles.textLine,
+                  {
+                    backgroundColor: item.type === "user" ? "#f3f6fc" : "white",
+                    alignItems: item.type === "user" ? "center" : "flex-start",
+                    marginTop: item.type === "user" ? 20 : 0,
+                    paddingTop: item.type === "user" ? 0 : 20,
+                  },
+                ]}
+              >
+                {item.type === "user" ? (
+                  <View style={styles.avertar}>
+                    <Feather name="user" size={32} color="white" />
+                  </View>
+                ) : (
+                  <Image
+                    source={{ uri: GPTLOGO }}
+                    style={{
+                      width: 50,
+                      height: 50,
+                      marginRight: 20,
+                      marginLeft: 10,
+                    }}
+                  />
+                )}
+                <View style={{ width: "82%" }}>
+                  {renderText(item.text, item.type)}
+                </View>
+              </View>
             )}
-            <View style={{ width: "82%" }}>
-              {renderText(item.text, item.type)}
+          />
+
+          <View style={styles.inputBar}>
+            <TextInput
+              placeholder={"내용을 입력하세요"}
+              style={styles.input}
+              value={textInput}
+              onChangeText={(text) => setTextInput(text)}
+            />
+            <View
+              style={{ position: "absolute", right: 18, paddingBottom: 10 }}
+            >
+              <TouchableOpacity onPress={handleSend}>
+                <FontAwesome
+                  name="send-o"
+                  size={24}
+                  color="#5a67ea"
+                  style={{ marginRight: 7 }}
+                />
+              </TouchableOpacity>
             </View>
           </View>
-        )}
-      />
-
-      <View style={styles.inputBar}>
-        <TextInput
-          placeholder={"내용을 입력하세요"}
-          style={styles.input}
-          value={textInput}
-          onChangeText={(text) => setTextInput(text)}
-        />
-        <View style={{ position: "absolute", right: 18, paddingBottom: 10 }}>
-          <TouchableOpacity onPress={handleSend}>
-            <FontAwesome
-              name="send-o"
-              size={24}
-              color="#5a67ea"
-              style={{ marginRight: 7 }}
-            />
-          </TouchableOpacity>
-        </View>
-      </View>
+        </>
+      )}
     </View>
   );
 };
