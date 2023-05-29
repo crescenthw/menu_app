@@ -17,6 +17,7 @@ import { useState } from "react";
 import { useContext } from "react";
 import { FavoritesContext } from "../store/context/favorites-context";
 import { imgData } from "../data/img-data";
+import { GOOGLE_MAP_LOGO, RECIPE_LOGO } from "../img/imgSource";
 
 export default function MealDetailScreen({ route, navigation }) {
   const favoriteMealCtx = useContext(FavoritesContext);
@@ -119,12 +120,13 @@ export default function MealDetailScreen({ route, navigation }) {
         <Pressable
           style={({ pressed }) => [
             styles.buttonView,
-            { marginRight: 25 },
+            { marginRight: 15 },
             pressed ? styles.buttonPressed : null,
           ]}
           android_ripple={{ color: "#ccc" }}
           onPress={() => handleRecipePress(menuName)}
         >
+          <Image source={{ uri: RECIPE_LOGO }} style={styles.logoImg} />
           <Text style={styles.btnText}>More Recipe</Text>
         </Pressable>
         <Pressable
@@ -135,6 +137,7 @@ export default function MealDetailScreen({ route, navigation }) {
           android_ripple={{ color: "#ccc" }}
           onPress={() => handleLinkPress(menuName)}
         >
+          <Image source={{ uri: GOOGLE_MAP_LOGO }} style={styles.logoImg} />
           <Text style={styles.btnText}>Google Map</Text>
         </Pressable>
       </View>
@@ -170,10 +173,10 @@ const styles = StyleSheet.create({
   buttonView: {
     alignItems: "center",
     justifyContent: "center",
-    paddingVertical: 15,
-    paddingHorizontal: 30,
+    paddingVertical: 10,
+    paddingHorizontal: 10,
     elevation: 3,
-    backgroundColor: "#5a67ea",
+    backgroundColor: "white",
     borderRadius: 30,
     margin: 10,
     marginTop: 20,
@@ -181,15 +184,25 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 8,
+    flexDirection: "row",
   },
   btnText: {
     fontSize: 16,
     lineHeight: 21,
     fontWeight: "bold",
     letterSpacing: 0.25,
-    color: "white",
+    color: "#5a67ea",
+    marginRight: 3,
   },
   buttonPressed: {
     opacity: 0.5,
+    borderRadius: 30,
+  },
+  logoImg: {
+    width: 40,
+    height: 40,
+    marginRight: 8,
+    marginLeft: 5,
+    borderRadius: 50,
   },
 });

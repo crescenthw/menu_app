@@ -25,8 +25,6 @@ function FavoritesScreen() {
 
   const LoadMenu = async () => {
     const s = await AsyncStorage.getItem("@menu");
-    console.log(s);
-    console.log(JSON.parse(s));
   };
 
   useEffect(() => {
