@@ -21,7 +21,7 @@ const GPTScreen = ({ navigation }) => {
   const apiKey = API_KEY;
   const apiUrl = "https://api.openai.com/v1/chat/completions";
   const [textInput, setTextInput] = useState("");
-  const realText = `${textInput} 위의 조건에 해당하는 음식 7가지를 추천해줘, 출력형식은 {번호. 음식 (줄바꿈)-간단한 음식 설명(줄바꿈)} 형식으로 출력해줘`;
+  const realText = `${textInput} 위의 조건에 해당하는 음식 7가지를 추천해줘, 출력형식은 {번호. 음식(줄바꿈)} 형식으로 출력해줘`;
 
   const handleSend = async () => {
     try {
@@ -94,7 +94,7 @@ const GPTScreen = ({ navigation }) => {
     } else if (type === "bot") {
       const words = text.split("\n");
       const elements = words.map((word, index) => {
-        const extractedWord = word.replace(/[0-9.]/g, "");
+        const extractedWord = word.replace(/[0-9.\s]+/g, "");
         return (
           <TouchableOpacity
             key={index}
@@ -120,7 +120,7 @@ const GPTScreen = ({ navigation }) => {
             style={styles.body}
             ListHeaderComponent={
               <View style={styles.sampleTextView}>
-                <Text style={styles.sampleTitle}>GPT 사용예시</Text>
+                <Text style={styles.sampleTitle}>GPT 사용설명</Text>
                 <Text></Text>
                 <Text
                   style={[
@@ -128,12 +128,12 @@ const GPTScreen = ({ navigation }) => {
                     { fontWeight: "600", marginBottom: 10 },
                   ]}
                 >
-                  1. 집에서 만들어 먹을 때
+                  1. 식재료, 음식 스타일(한식, 양식, 일식 등),식사를 같이하는
+                  사람(구성원), 식사목적 등을 상세하게 적어주세요!
                 </Text>
                 <Text style={styles.sampleText}>
-                  "나는 지금 감자, 돼지고기, 당근을 가지고 있고, {"\n"}해당
-                  음식은 가족과 함께 저녁식사로 먹을 예정이야. {"\n"}우리가족은
-                  한식을 선호해"
+                  예시{")"} 가족과 함께 먹기 좋은 돼지고기, 양파, 감자가 들어간
+                  한식을 추천해줘.
                 </Text>
                 <Text></Text>
                 <Text
@@ -142,11 +142,8 @@ const GPTScreen = ({ navigation }) => {
                     { fontWeight: "600", marginBottom: 10 },
                   ]}
                 >
-                  2. 배달 또는 식당에서 먹을 때
-                </Text>
-                <Text style={styles.sampleText}>
-                  "나는 한식을 먹고싶고, 돼지고기나{"\n"} 소고기가 들어간 음식을
-                  먹고 싶어"
+                  2. GPT가 추천한 메뉴를 터치하시면 레시피 정보와 식당정보를 알
+                  수 있습니다!
                 </Text>
               </View>
             }
@@ -174,6 +171,7 @@ const GPTScreen = ({ navigation }) => {
                       height: 50,
                       marginRight: 20,
                       marginLeft: 10,
+                      borderRadius: 50,
                     }}
                   />
                 )}
@@ -199,7 +197,7 @@ const GPTScreen = ({ navigation }) => {
                   name="send-o"
                   size={24}
                   color="#5a67ea"
-                  style={{ marginRight: 7 }}
+                  style={{ marginRight: 8, marginTop: 13 }}
                 />
               </TouchableOpacity>
             </View>
@@ -215,6 +213,7 @@ export default GPTScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#f3f6fc",
   },
   title: {
     fontSize: 28,
@@ -236,6 +235,7 @@ const styles = StyleSheet.create({
   sampleTitle: {
     textAlign: "center",
     fontSize: 20,
+    fontWeight: "700",
   },
   sampleText: {
     fontSize: 16,
@@ -289,6 +289,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     paddingBottom: 10,
     opacity: 0.8,
+    paddingTop: 15,
   },
   input: {
     height: 50,

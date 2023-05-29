@@ -11,7 +11,9 @@ export default function List({ data }) {
 
 const styles = StyleSheet.create({
   listItem: {
-    backgroundColor: "#8ed596",
+    backgroundColor: "white",
+    borderWidth: 1.5,
+    borderColor: "#8d95e4",
     borderRadius: 6,
     padding: 10,
     paddingHorizontal: 8,

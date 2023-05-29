@@ -16,10 +16,10 @@ export const CATEGORIES = [
 
 export const MEALS = [
   new Meal(
-    "m1",
+    "스파게티",
     ["c1", "c2"],
     //음식이름
-    "Spaghetti with Tomato Sauce",
+    "스파게티", //스파게티
     "affordable",
     "simple",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Spaghetti_Bolognese_mit_Parmesan_oder_Grana_Padano.jpg/800px-Spaghetti_Bolognese_mit_Parmesan_oder_Grana_Padano.jpg",
@@ -50,9 +50,9 @@ export const MEALS = [
   ),
 
   new Meal(
-    "m2",
+    "토스트",
     ["c2"],
-    "Toast Hawaii",
+    "토스트", //토스트
     "affordable",
     "simple",
     "https://cdn.pixabay.com/photo/2018/07/11/21/51/toast-3532016_1280.jpg",
@@ -76,9 +76,9 @@ export const MEALS = [
   ),
 
   new Meal(
-    "m3",
+    "버거",
     ["c3"],
-    "Classic Hamburger",
+    "Classic Hamburger", //햄버거
     "pricey",
     "simple",
     "https://cdn.pixabay.com/photo/2014/10/23/18/05/burger-500054_1280.jpg",
@@ -138,9 +138,9 @@ export const MEALS = [
   ),
 
   new Meal(
-    "m5",
+    "연어",
     ["c2", "c5", "c10"],
-    "Salad with Smoked Salmon",
+    "Salad with Smoked Salmon", //생선
     "luxurious",
     "simple",
     "https://cdn.pixabay.com/photo/2016/10/25/13/29/smoked-salmon-salad-1768890_1280.jpg",
@@ -203,9 +203,9 @@ export const MEALS = [
   ),
 
   new Meal(
-    "m7",
+    "팬케이크",
     ["c7"],
-    "Pancakes",
+    "Pancakes", //팬케이크
     "affordable",
     "simple",
     "https://cdn.pixabay.com/photo/2018/07/10/21/23/pancake-3529653_1280.jpg",
@@ -232,9 +232,9 @@ export const MEALS = [
   ),
 
   new Meal(
-    "m8",
+    "카레",
     ["c8"],
-    "Creamy Indian Chicken Curry",
+    "Creamy Indian Chicken Curry", //카레
     "pricey",
     "challenging",
     "https://cdn.pixabay.com/photo/2018/06/18/16/05/indian-food-3482749_1280.jpg",
@@ -263,9 +263,9 @@ export const MEALS = [
   ),
 
   new Meal(
-    "m9",
+    "초콜릿",
     ["c9"],
-    "Chocolate Souffle",
+    "Chocolate Souffle", //초콜릿
     "affordable",
     "hard",
     "https://cdn.pixabay.com/photo/2014/08/07/21/07/souffle-412785_1280.jpg",
@@ -311,7 +311,7 @@ export const MEALS = [
   new Meal(
     "m10",
     ["c2", "c5", "c10"],
-    "Asparagus Salad with Cherry Tomatoes",
+    "Asparagus Salad with Cherry Tomatoes", //셀러드
     "luxurious",
     "simple",
     "https://cdn.pixabay.com/photo/2018/04/09/18/26/asparagus-3304997_1280.jpg",

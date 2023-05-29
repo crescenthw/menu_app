@@ -3,7 +3,7 @@ import LottieView from "lottie-react-native";
 import { View, StyleSheet, Text, Dimensions } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
-const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get("window");
+// const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get("window");
 
 export default function GPTLoadingScreen() {
   return (
@@ -12,7 +12,6 @@ export default function GPTLoadingScreen() {
       start={{ x: 0, y: 0 }}
       end={{ x: 0, y: 1 }}
       style={styles.gradient}
-      opacity={0.5}
     >
       <View style={[StyleSheet.absoluteFillObject, styles.container]}>
         <LottieView
@@ -33,13 +32,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     borderRadius: 4,
     overflow: "hidden",
-    borderWidth: 1,
     borderColor: "rgba(0, 0, 0, 0.2)",
     justifyContent: "center",
     alignItems: "center",
     opacity: 0.5,
-    width: SCREEN_WIDTH,
-    height: SCREEN_HEIGHT,
   },
   container: {
     zIndex: 1,

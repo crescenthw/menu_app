@@ -1,10 +1,3 @@
-// import { Text } from "react-native";
-
-// export default function MenuScreen({ navigation, route }) {
-//   const detailMenu = route.params.menu;
-//   return <Text>{detailMenu}</Text>;
-// }
-
 import {
   Image,
   Text,
@@ -14,19 +7,25 @@ import {
   Button,
   Pressable,
   Linking,
+  TouchableOpacity,
 } from "react-native";
-import { MEALS } from "../data/dummy-data";
 import Subtitle from "../components/MealDetail/Subtitle";
 import List from "../components/MealDetail/List";
 import { useLayoutEffect } from "react";
 import { AntDesign } from "@expo/vector-icons";
+import { useState } from "react";
+import { useContext } from "react";
+import { FavoritesContext } from "../store/context/favorites-context";
+import { imgData } from "../data/img-data";
 
 export default function MealDetailScreen({ route, navigation }) {
-  const menuName = route.params.menu;
-  const mealId = "m3";
+  const favoriteMealCtx = useContext(FavoritesContext);
+
+  const MenuName = route.params.menu;
+  const strmenu = MenuName.split(/[-(),\{\[\]\/:>=]/);
+  const splitmenu = strmenu[0];
+  const menuName = splitmenu.replace(/[\s\uFEFF\xA0]+/g, "");
   const GptText = route.params.text; //추가
-  const selectedMeal = MEALS.find((meal) => meal.id === mealId);
-  const detailText = `${menuName}의 레시피와 재료를 알려줘`;
   const ingredientStartIndex = GptText.indexOf("[재료]");
   const ingredientEndIndex = GptText.indexOf("[레시피]");
 
@@ -50,14 +49,28 @@ export default function MealDetailScreen({ route, navigation }) {
     filteredText = filteredText.replace(recipeText, "");
   }
 
+  const mealsFavorite = favoriteMealCtx.ids.includes(menuName);
+
   function headerButtonPresshandler() {
-    console.log("Pressed!!");
+    if (mealsFavorite) {
+      favoriteMealCtx.removeFavorite(menuName);
+    } else {
+      favoriteMealCtx.addFavorite(menuName);
+    }
   }
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => {
-        return <AntDesign name="staro" size={28} color="white" />;
+        return (
+          <TouchableOpacity onPress={headerButtonPresshandler}>
+            <AntDesign
+              name={mealsFavorite ? "star" : "staro"}
+              size={28}
+              color={mealsFavorite ? "yellow" : "white"}
+            />
+          </TouchableOpacity>
+        );
       },
     });
   }, [navigation, headerButtonPresshandler]);
@@ -67,11 +80,26 @@ export default function MealDetailScreen({ route, navigation }) {
     Linking.openURL(url);
   };
 
+  const handleRecipePress = (text) => {
+    const url = `https://www.10000recipe.com/recipe/list.html?q=${menuName}`;
+    Linking.openURL(url);
+  };
+
   const arrIngredientText = ingredientText.split("-");
   const arrRecipeText = recipeText.split(/\d+\.\s/).filter(Boolean);
 
+  for (let i = 0; i < imgData.length; i++) {
+    const titleValue = imgData[i].title;
+
+    // Check if titleValue exists in array1
+    if (menuName === titleValue) {
+      favoriteImgUrl = imgData[i].img;
+    }
+  }
+
   return (
     <ScrollView style={styles.rootContainer}>
+      <Image source={{ uri: favoriteImgUrl }} style={styles.image} />
       <Text style={styles.title}>{menuName}</Text>
       <View style={styles.listOuterContainer}>
         <View style={styles.listContainer}>
@@ -81,16 +109,35 @@ export default function MealDetailScreen({ route, navigation }) {
           <List data={arrRecipeText} />
         </View>
       </View>
-      <Pressable
-        style={({ pressed }) => [
-          styles.buttonView,
-          pressed ? styles.buttonPressed : null,
-        ]}
-        android_ripple={{ color: "#ccc" }}
-        onPress={() => handleLinkPress(menuName)}
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
       >
-        <Text style={styles.btnText}>Search to google Map</Text>
-      </Pressable>
+        <Pressable
+          style={({ pressed }) => [
+            styles.buttonView,
+            { marginRight: 25 },
+            pressed ? styles.buttonPressed : null,
+          ]}
+          android_ripple={{ color: "#ccc" }}
+          onPress={() => handleRecipePress(menuName)}
+        >
+          <Text style={styles.btnText}>More Recipe</Text>
+        </Pressable>
+        <Pressable
+          style={({ pressed }) => [
+            styles.buttonView,
+            pressed ? styles.buttonPressed : null,
+          ]}
+          android_ripple={{ color: "#ccc" }}
+          onPress={() => handleLinkPress(menuName)}
+        >
+          <Text style={styles.btnText}>Google Map</Text>
+        </Pressable>
+      </View>
     </ScrollView>
   );
 }
@@ -100,8 +147,12 @@ const styles = StyleSheet.create({
     marginBottom: 32,
   },
   image: {
-    width: "100%",
-    height: 350,
+    width: "95%",
+    height: 300,
+    borderRadius: 15,
+    margin: 10,
+    alignItems: "center",
+    justifyContent: "center",
   },
   title: {
     fontWeight: "bold",
@@ -119,9 +170,8 @@ const styles = StyleSheet.create({
   buttonView: {
     alignItems: "center",
     justifyContent: "center",
-    paddingVertical: 12,
-    paddingHorizontal: 32,
-    borderRadius: 4,
+    paddingVertical: 15,
+    paddingHorizontal: 30,
     elevation: 3,
     backgroundColor: "#5a67ea",
     borderRadius: 30,
