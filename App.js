@@ -6,11 +6,11 @@ import GPTScreen from "./screen/GPTScreen";
 import MenuScreen from "./screen/MenuScreen";
 import FontDancing from "./fonts/FontDancing";
 import SplashScreen from "./screen/SplashScreen";
-import GPTLoadingScreen from "./screen/GPTLoadingScreen";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import FavoritesScreen from "./screen/FavoritesScreen";
 import FavoritesContextProvider from "./store/context/favorites-context";
-
+import { AntDesign } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 // import "react-native-gesture-handler";
 // import { createDrawerNavigator } from "@react-navigation/drawer";
 
@@ -27,10 +27,36 @@ function TabNavigator() {
         headerTintColor: "white",
         sceneContainerStyle: { backgroundColor: "#f3f6fc" },
         headerTitleAlign: "center",
+        tabBarItemStyle: { flexDirection: "row" },
+        tabBarIndicatorStyle: { backgroundColor: "teal", height: 3 },
+        tabBarActiveTintColor: "teal",
+        tabBarInactiveTintColor: "grey",
       }}
     >
-      <Tab.Screen name="Chatting" component={GPTScreen} />
-      <Tab.Screen name="Favorite" component={FavoritesScreen} />
+      <Tab.Screen
+        name="Chatting"
+        component={GPTScreen}
+        options={{
+          tabBarLabel: "채팅",
+          tabBarIcon: ({ color }) => (
+            <Ionicons
+              name="chatbubble-ellipses-outline"
+              size={24}
+              color={color}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Favorite"
+        component={FavoritesScreen}
+        options={{
+          tabBarLabel: "즐겨찾기",
+          tabBarIcon: ({ color }) => (
+            <AntDesign name="staro" size={24} color={color} />
+          ),
+        }}
+      />
     </Tab.Navigator>
   );
 }
